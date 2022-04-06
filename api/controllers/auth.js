@@ -2,7 +2,6 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const app = require("../app")
 const mysql = require("mysql2")
-const bluebird  = require('bluebird')
 
 
   const db =  mysql.createConnection({
@@ -10,7 +9,6 @@ const bluebird  = require('bluebird')
     user:process.env.DB_USER || "HMU",
     password:process.env.DB_PASSWORD || 'password',
     database:process.env.DATABASE || 'HMU_ROBOTICS_CLUB',
-    Promise: bluebird
 });
 
 db.connect(function(err){
@@ -29,7 +27,7 @@ exports.user_signup = async(req,res,next) =>{
         else{
             bcrypt.hash(req.body.password,10,(err,hash)=>{
                 if(err){
-                    res.status(500).json({
+                    res.status(500).json({ 
                         error:err
                     })
                 } 

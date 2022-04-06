@@ -2,7 +2,9 @@ const express = require("express")
 const morgan = require('morgan')
 const path = require('path');
 const mysql = require('mysql2')
-const authRoutes = require("./routes/auth")
+const api_auth = require("./routes/api_auth")
+const api_storage = require("./routes/api_storage")
+let ejs = require('ejs');
 
 const db = mysql.createConnection({
     host:process.env.DB_HOST || "localhost",
@@ -23,6 +25,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(__dirname + '/public'));
 
 
 app.use((req,res,next)=>{
@@ -35,7 +38,8 @@ app.use((req,res,next)=>{
     next();
 })
 
-app.use('/auth',authRoutes)
+app.use('/api/auth',api_auth)
+app.use('/api/storage',api_storage)
 
 
 app.use((req,res,next)=>{
