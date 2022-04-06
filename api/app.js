@@ -6,7 +6,7 @@ const authRoutes = require("./routes/auth")
 const db = mysql.createConnection({
     host:process.env.DB_HOST || "localhost",
     user:process.env.DB_USER || "HMU",
-    password:process.env.DB_PASSWORD || 'jimlion321321',
+    password:process.env.DB_PASSWORD || '',
     database:process.env.database || 'HMU_ROBOTICS'
 });
 
