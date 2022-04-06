@@ -1,13 +1,14 @@
 const express = require("express")
 const morgan = require('morgan')
-const mysql = require('mysql')
+const path = require('path');
+const mysql = require('mysql2')
 const authRoutes = require("./routes/auth")
 
 const db = mysql.createConnection({
     host:process.env.DB_HOST || "localhost",
     user:process.env.DB_USER || "HMU",
     password:process.env.DB_PASSWORD || '',
-    database:process.env.database || 'HMU_ROBOTICS'
+    database:process.env.DATABASE || 'HMU_ROBOTICS_CLUB'
 });
 
 db.connect((err)=>{
@@ -20,6 +21,8 @@ const app = express()
 app.use(morgan("dev"))
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 
 app.use((req,res,next)=>{
