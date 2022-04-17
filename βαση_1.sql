@@ -45,7 +45,7 @@ create table item(
     image longblob,
     category_id int not null,
     description text,
-    code varchar(36),
+    code varchar(36) not null,
     status enum('available', 'unavailable'),
     created_at timestamp default current_timestamp,
     updated_at timestamp default current_timestamp on update current_timestamp,

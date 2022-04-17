@@ -39,6 +39,14 @@ exports.find_all_users = async(req,res,next)=>{
     db.query(sql,(err,result)=>{
         if(err) throw err
         console.log(result)
-        if()
+        if(result.length == 0){
+            res.status(409).json("Invalid input")
+        }
+        else{
+            res.status(200).json({
+                Message:"Item found",
+                User: result
+            })
+        }
     })
 }

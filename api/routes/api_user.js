@@ -4,5 +4,8 @@ const userController = require("../controllers/user")
 const AuthMiddleware = require("../middleware/auth")
 const {admin ,viewer,editor} = require("../middleware/roles")
 
-router.get("/user/:id/email",AuthMiddleware,editor || admin)
-router.get("/user/email",AuthMiddleware,editor || admin)
+router.get("/:id/email",AuthMiddleware,viewer,userController.find_user)
+router.get("/email",AuthMiddleware,viewer,userController.find_all_users)
+
+
+module.exports = router

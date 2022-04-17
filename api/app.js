@@ -4,6 +4,7 @@ const path = require('path');
 const mysql = require('mysql2')
 const api_auth = require("./routes/api_auth")
 const api_storage = require("./routes/api_storage")
+const api_users = require("./routes/api_user")
 let ejs = require('ejs');
 
 const db = mysql.createConnection({
@@ -40,6 +41,7 @@ app.use((req,res,next)=>{
 
 app.use('/api/auth',api_auth)
 app.use('/api/storage',api_storage)
+app.use('/api/members',api_users)
 
 
 app.use((req,res,next)=>{
