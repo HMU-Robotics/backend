@@ -5,7 +5,9 @@ const mysql = require('mysql2')
 const api_auth = require("./routes/api_auth")
 const api_storage = require("./routes/api_storage")
 const api_users = require("./routes/api_user")
-let ejs = require('ejs');
+const cors = require("cors")
+const ejs = require('ejs');
+
 
 const db = mysql.createConnection({
     host:process.env.DB_HOST || "localhost",
@@ -21,6 +23,7 @@ db.connect((err)=>{
 
 const app = express()
 
+app.use(cors());
 app.use(morgan("dev"))
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
