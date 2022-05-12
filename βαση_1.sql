@@ -16,6 +16,7 @@ create table user(
     discord_id text,
     password varchar(80),
     role_id int not null,
+    Newsletter int default 1,
     created_at timestamp default current_timestamp,
     updated_at timestamp default current_timestamp on update current_timestamp,
     primary key (id),

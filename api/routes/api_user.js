@@ -1,6 +1,6 @@
 const express =  require("express")
 const router = express.Router()
-const userController = require("../controllers/user")
+const userController = require("../controllers/api_user")
 const AuthMiddleware = require("../middleware/auth")
 const {admin ,viewer,editor} = require("../middleware/roles")
 

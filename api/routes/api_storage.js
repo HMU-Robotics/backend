@@ -1,13 +1,12 @@
 const express = require('express')
 const router = express.Router()
-const StorageController = require('../controllers/storage')
+const StorageController = require('../controllers/api_storage')
 const AuthMiddleware = require("../middleware/auth")
 const {admin,viewer,editor} = require("../middleware/roles")
 
 router.get("/item/all",AuthMiddleware,StorageController.get_all)
-router.get("/item/:item_id",AuthMiddleware,StorageController.get_by_id)
+router.get("/item/id/:item_id",AuthMiddleware,StorageController.get_by_id)
 router.post("/item/newItem",AuthMiddleware,viewer,StorageController.add_new_item)
-router.post("/item/:item_id",AuthMiddleware,viewer,StorageController.get_by_id)
-router.get('/item/:itemName',AuthMiddleware,StorageController.get_by_name)
+router.get('/item/name/:itemName',AuthMiddleware,StorageController.get_by_name)
 
 module.exports = router;

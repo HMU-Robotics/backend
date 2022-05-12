@@ -66,7 +66,7 @@ exports.user_login = async(req,res,next) =>{
             res.status(409).json("Invalid input")
         }else{
             bcrypt.compare(req.body.password , user[0].password , (err,result)=>{
-                if(err){
+                if(!result){
                     return res.status(405).json({
                         message:"Auth failed"
                     })
@@ -92,3 +92,5 @@ exports.user_login = async(req,res,next) =>{
 
     })
 }
+
+

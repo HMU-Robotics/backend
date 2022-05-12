@@ -34,10 +34,11 @@ exports.get_by_id = async(req,res,next)=>{
 
 exports.get_by_name = async(req,res,next)=>{
     const {itemName} = req.params
-    let sql = `SELECT * FROM item WHERE name = ${itemName}`
+    console.log(itemName)
+    let sql = `SELECT * FROM item WHERE name = "${itemName}"`
     db.query(sql,(err,result)=>{
         if(err) throw err;
-        console.log(result);
+        console.log(result[0]);
         if(result.length == 0){
             res.status(409).json("Invalid input")
         }
@@ -63,7 +64,7 @@ exports.add_new_item = async(req,res,next)=>{
             try{
                 
                 db.query(sql,(err,result)=>{
-                    if(err) throw err;
+                    if(!result) throw err;
                     console.log(result)
                     res.status(200).json({
                         message : "Item added to db"
@@ -83,8 +84,8 @@ exports.add_new_item = async(req,res,next)=>{
 exports.get_all = async(req,res,next)=>{
     let sql = `SELECT * FROM item `
     db.query(sql,(err,result)=>{
-        if(err) throw err;
-        console.log(result[0]);
+        if(!result) throw err
+        console.log(result)
         if(result.length == 0){
             res.status(409).json("Invalid input")
         }

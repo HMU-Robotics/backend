@@ -1,12 +1,16 @@
 const express = require("express")
 const morgan = require('morgan')
-const path = require('path');
+const cookieParser = require("cookie-parser");
 const mysql = require('mysql2')
 const api_auth = require("./routes/api_auth")
 const api_storage = require("./routes/api_storage")
 const api_users = require("./routes/api_user")
+<<<<<<< Updated upstream
 const cors = require("cors")
 const ejs = require('ejs');
+=======
+const helmet = require("helmet")
+>>>>>>> Stashed changes
 
 
 const db = mysql.createConnection({
@@ -16,20 +20,25 @@ const db = mysql.createConnection({
     database:process.env.DATABASE || 'HMU_ROBOTICS_CLUB'
 });
 
+
 db.connect((err)=>{
     if(err) throw err;
     console.log("Database ready...")
 })
 
+
 const app = express()
 
+<<<<<<< Updated upstream
 app.use(cors());
+=======
+app.use(helmet());
+app.disable('x-powered-by')
+>>>>>>> Stashed changes
 app.use(morgan("dev"))
 app.use(express.json())
-app.use(express.urlencoded({extended:true}))
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-app.use(express.static(__dirname + '/public'));
+app.use(express.urlencoded({extended:false}))
+app.use(cookieParser());
 
 
 app.use((req,res,next)=>{
