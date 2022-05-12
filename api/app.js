@@ -1,16 +1,12 @@
 const express = require("express")
 const morgan = require('morgan')
 const cookieParser = require("cookie-parser");
+
 const mysql = require('mysql2')
 const api_auth = require("./routes/api_auth")
 const api_storage = require("./routes/api_storage")
 const api_users = require("./routes/api_user")
-<<<<<<< Updated upstream
-const cors = require("cors")
-const ejs = require('ejs');
-=======
 const helmet = require("helmet")
->>>>>>> Stashed changes
 
 
 const db = mysql.createConnection({
@@ -29,16 +25,15 @@ db.connect((err)=>{
 
 const app = express()
 
-<<<<<<< Updated upstream
-app.use(cors());
-=======
 app.use(helmet());
 app.disable('x-powered-by')
->>>>>>> Stashed changes
 app.use(morgan("dev"))
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 app.use(cookieParser());
+app.use(session(sessionConfig));
+
+
 
 
 app.use((req,res,next)=>{
@@ -54,6 +49,7 @@ app.use((req,res,next)=>{
 app.use('/api/auth',api_auth)
 app.use('/api/storage',api_storage)
 app.use('/api/members',api_users)
+app.use('/auth',auth)
 
 
 app.use((req,res,next)=>{
