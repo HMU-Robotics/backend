@@ -16,8 +16,7 @@ db.connect(function(err){
 
 exports.find_user = async(req,res,next)=>{
     const {id} = req.params
-    let sql = `SELECT * from user WHERE id = ${id}`
-    db.query(sql,(err,result)=>{
+    db.query('SELECT * from `user` WHERE `id` = ?',[id],(err,result)=>{
         if(err) throw err
         console.log(result)
         if(result.length == 0){
@@ -36,7 +35,7 @@ exports.find_user = async(req,res,next)=>{
 
 exports.find_all_users = async(req,res,next)=>{
     let sql = `SELECT * from user`
-    db.query(sql,(err,result)=>{
+    db.query('SELECT * from `user`',(err,result)=>{
         if(err) throw err
         console.log(result)
         if(result.length == 0){
