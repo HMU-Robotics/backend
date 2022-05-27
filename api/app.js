@@ -6,6 +6,8 @@ const api_storage = require("./routes/api_storage")
 const api_users = require("./routes/api_user")
 const helmet = require("helmet")
 
+require('dotenv').config()
+
 
 const db = mysql.createConnection({
     host:process.env.DB_HOST || "localhost",
