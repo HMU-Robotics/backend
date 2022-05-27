@@ -25,4 +25,6 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_SERVER_KEY }}
-          script: ls
+          script: |
+            cd scripts
+            ./deploy_backend.sh
