@@ -56,29 +56,38 @@ exports.add_new_item = async(req,res,next)=>{
         if(result.length != 0){
             res.status(409).json("Invalid input")
         }
-        else{
-            sql = `INSERT INTO item(name,image,category_id,description,code,status) VALUES ('${req.body.name}','${req.body.image}',${req.body.category},${req.body.description},'${req.body.code}',1)`
-            try{
-                
-                db.query('INSERT INTO `item`(name,image,category_id,description,code,status) VALUES(?,?,?,?,?,?)',[req.body.name,req.body.image,req.body.category,req.body.description,req.body.code],(err,result)=>{
-                    if(!result) throw err;
-                    console.log(result)
-                    res.status(200).json({
-                        message : "Item added to db"
+        db.query('SELECT * FROM `category` where `name` = ?',[req.body.name],(err,result)=>{
+            if(err) throw err;
+            console.log(result);
+            if(result.length == 0){
+                res.status(409).json("Invalid input")
+            }
+            else{
+                try{
+                    categoryid = result.id
+                    print(categoryid)
+                    db.query('INSERT INTO `item`(name,image,category_id,description,code,status) VALUES(?,?,?,?,?,?)',[req.body.name,req.body.image,categoryid,req.body.description,req.body.code],(err,result)=>{
+                        if(!result) throw err;
+                        console.log(result)
+                        res.status(200).json({
+                            message : "Item added to db"
+                        })
                     })
-                })
+                }
+                catch(err){
+
+                    console.log(err)
+                    res.status(500).json({
+                        error:err
+                    
+                    })
+                }
             }
-            catch(err){
-                console.log(err)
-                res.status(500).json({
-                    error:err
-                })
-            }
-        }
+        })
     })
 }
 
-exports.get_all = async(req,res,next)=>{
+exports.get_all = async(req,res,next)=>{ 
     db.query('SELECT * FROM `item`',(err,result)=>{
         if(!result) throw err
         console.log(result)
@@ -94,6 +103,33 @@ exports.get_all = async(req,res,next)=>{
                 Message:"Item found",
                 Items:itemArray
             })
+        }
+    })
+}
+
+exports.newCategory = async(req,res,next)=>{
+    db.query('select * from category where `name` = ? ',[req.body.name],(err,result)=>{
+        if(err) throw err;
+        console.log(result);
+        if(result.length !=0){
+            res.status(409).json("Invalid input")
+        }
+        else{
+            try{
+                dq.query('INSERT INTO `category`(name) VALUES(?)',[req.body.name],(err,result)=>{
+                    if(err) throw err;
+                    console.log(result)
+                    res.status(200).json({
+                        message:"Category added"
+                    })
+                })
+            }
+            catch(err){
+                console.log(err)
+                res.status(500).json({
+                    error:err
+                })
+            }
         }
     })
 }
