@@ -65,7 +65,7 @@ exports.add_new_item = async(req,res,next)=>{
             else{
                 try{
                     categoryid = result.id
-                    print(categoryid)
+                    console.log(categoryid)
                     db.query('INSERT INTO `item`(name,image,category_id,description,code,status) VALUES(?,?,?,?,?,?)',[req.body.name,req.body.image,categoryid,req.body.description,req.body.code],(err,result)=>{
                         if(!result) throw err;
                         console.log(result)
@@ -116,7 +116,7 @@ exports.newCategory = async(req,res,next)=>{
         }
         else{
             try{
-                dq.query('INSERT INTO `category`(name) VALUES(?)',[req.body.name],(err,result)=>{
+                db.query('INSERT INTO `category`(name) VALUES(?)',[req.body.name],(err,result)=>{
                     if(err) throw err;
                     console.log(result)
                     res.status(200).json({
