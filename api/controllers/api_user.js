@@ -9,9 +9,6 @@ const db =  mysql.createPool({
     database:process.env.DATABASE || 'HMU_ROBOTICS_CLUB',
 });
 
-db.connect(function(err){
-    if(err) throw err;
-})
 
 
 exports.find_user = async(req,res,next)=>{

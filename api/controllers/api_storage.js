@@ -11,9 +11,6 @@ const db =  mysql.createPool({
     queueLimit: 0
 });
 
-db.connect(function(err){
-    if(err) throw err;
-})
 
 exports.get_by_id = async(req,res,next)=>{
     const {item_id} = req.params

@@ -14,10 +14,6 @@ const mysql = require("mysql2")
     queueLimit: 0
 });
 
-db.connect(function(err){
-    if(err) throw err;
-})
-
 
 exports.user_signup = async(req,res,next) =>{
     db.execute('SELECT * FROM `user` WHERE `email` = ?',[req.body.email],(err,result)=>{
