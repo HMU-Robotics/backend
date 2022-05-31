@@ -1,11 +1,14 @@
 const mysql = require('mysql2')
 
 
-const db =  mysql.createConnection({
+const db =  mysql.createPool({
     host:process.env.DB_HOST || "localhost",
     user:process.env.DB_USER || "HMU",
     password:process.env.DB_PASSWORD || 'password',
     database:process.env.DATABASE || 'HMU_ROBOTICS_CLUB',
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
 });
 
 db.connect(function(err){
@@ -14,7 +17,7 @@ db.connect(function(err){
 
 exports.get_by_id = async(req,res,next)=>{
     const {item_id} = req.params
-    db.query('SELECT * FROM `item` WHERE `id` = ?',[item_id],(err,result)=>{
+    db.execute('SELECT * FROM `item` WHERE `id` = ?',[item_id],(err,result)=>{
         if(err) throw err;
         console.log(result[0]);
         if(result.length == 0){
@@ -34,7 +37,7 @@ exports.get_by_id = async(req,res,next)=>{
 exports.get_by_name = async(req,res,next)=>{
     const {itemName} = req.params
     console.log(itemName)
-    db.query('SELECT * FROM `item` WHERE `name` = ?',[itemName],(err,result)=>{
+    db.execute('SELECT * FROM `item` WHERE `name` = ?',[itemName],(err,result)=>{
         if(err) throw err;
         console.log(result[0]);
         if(result.length == 0){
@@ -50,13 +53,13 @@ exports.get_by_name = async(req,res,next)=>{
 }
 
 exports.add_new_item = async(req,res,next)=>{
-    db.query('SELECT * FROM `item` WHERE `code` = ?',[req.body.code],(err,result)=>{
+    db.execute('SELECT * FROM `item` WHERE `code` = ?',[req.body.code],(err,result)=>{
         if(err) throw err;
         console.log(result);
         if(result.length != 0){
             res.status(409).json("Invalid input")
         }
-        db.query('SELECT * FROM `category` where `name` = ?',[req.body.name],(err,result)=>{
+        db.execute('SELECT * FROM `category` where `name` = ?',[req.body.name],(err,result)=>{
             if(err) throw err;
             console.log(result);
             if(result.length == 0){
@@ -66,7 +69,7 @@ exports.add_new_item = async(req,res,next)=>{
                 try{
                     categoryid = result[0].id
                     console.log(categoryid)
-                    db.query('INSERT INTO `item`(name,image,category_id,description,code,status) VALUES(?,?,?,?,?,?)',[req.body.name,req.body.image,categoryid,req.body.description,req.body.code,req.body.status],(err,result)=>{
+                    db.execute('INSERT INTO `item`(name,image,category_id,description,code,status) VALUES(?,?,?,?,?,?)',[req.body.name,req.body.image,categoryid,req.body.description,req.body.code,req.body.status],(err,result)=>{
                         if(!result) throw err;
                         console.log(result)
                         res.status(200).json({
@@ -88,7 +91,7 @@ exports.add_new_item = async(req,res,next)=>{
 }
 
 exports.get_all = async(req,res,next)=>{ 
-    db.query('SELECT * FROM `item`',(err,result)=>{
+    db.execute('SELECT * FROM `item`',(err,result)=>{
         if(!result) throw err
         console.log(result)
         if(result.length == 0){
@@ -108,7 +111,7 @@ exports.get_all = async(req,res,next)=>{
 }
 
 exports.newCategory = async(req,res,next)=>{
-    db.query('select * from category where `name` = ? ',[req.body.name],(err,result)=>{
+    db.execute('select * from category where `name` = ? ',[req.body.name],(err,result)=>{
         if(err) throw err;
         console.log(result);
         if(result.length !=0){
@@ -116,7 +119,7 @@ exports.newCategory = async(req,res,next)=>{
         }
         else{
             try{
-                db.query('INSERT INTO `category`(name) VALUES(?)',[req.body.name],(err,result)=>{
+                db.execute('INSERT INTO `category`(name) VALUES(?)',[req.body.name],(err,result)=>{
                     if(err) throw err;
                     console.log(result)
                     res.status(200).json({

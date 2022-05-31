@@ -2,7 +2,7 @@ const mysql = require("mysql2")
 
 
 
-const db =  mysql.createConnection({
+const db =  mysql.createPool({
     host:process.env.DB_HOST || "localhost",
     user:process.env.DB_USER || "HMU",
     password:process.env.DB_PASSWORD || 'password',
@@ -16,7 +16,7 @@ db.connect(function(err){
 
 exports.find_user = async(req,res,next)=>{
     const {id} = req.params
-    db.query('SELECT * from `user` WHERE `id` = ?',[id],(err,result)=>{
+    db.execute('SELECT * from `user` WHERE `id` = ?',[id],(err,result)=>{
         if(err) throw err
         console.log(result)
         if(result.length == 0){
@@ -35,7 +35,7 @@ exports.find_user = async(req,res,next)=>{
 
 exports.find_all_users = async(req,res,next)=>{
     let sql = `SELECT * from user`
-    db.query('SELECT * from `user`',(err,result)=>{
+    db.execute('SELECT * from `user`',(err,result)=>{
         if(err) throw err
         console.log(result)
         if(result.length == 0){

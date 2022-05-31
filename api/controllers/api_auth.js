@@ -4,11 +4,14 @@ const app = require("../app")
 const mysql = require("mysql2")
 
 
-  const db =  mysql.createConnection({
+  const db =  mysql.createPool({
     host:process.env.DB_HOST || "localhost",
     user:process.env.DB_USER || "HMU",
     password:process.env.DB_PASSWORD || 'password',
     database:process.env.DATABASE || 'HMU_ROBOTICS_CLUB',
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
 });
 
 db.connect(function(err){
@@ -17,7 +20,7 @@ db.connect(function(err){
 
 
 exports.user_signup = async(req,res,next) =>{
-    db.query('SELECT * FROM `user` WHERE `email` = ?',[req.body.email],(err,result)=>{
+    db.execute('SELECT * FROM `user` WHERE `email` = ?',[req.body.email],(err,result)=>{
         if(err) throw err;
         console.log(result);
         if(result.length != 0){
@@ -32,7 +35,7 @@ exports.user_signup = async(req,res,next) =>{
                 } 
                 try{
                 
-                    db.query('INSERT INTO `user`(email,password,first_name,last_name,discord_id,role_id) VALUES(?,?,?,?,?,?)',[req.body.email,hash,req.body.first_name,req.body.last_name,req.body.discord_id,req.role_id],(err,result)=>{
+                    db.execute('INSERT INTO `user`(email,password,first_name,last_name,discord_id,role_id) VALUES(?,?,?,?,?,?)',[req.body.email,hash,req.body.first_name,req.body.last_name,req.body.discord_id,req.role_id],(err,result)=>{
                         if(err) throw err;
                         console.log(result)
                         res.status(200).json({
@@ -56,7 +59,7 @@ exports.user_signup = async(req,res,next) =>{
 }
 
 exports.user_login = async(req,res,next) =>{
-    db.query('SELECT * FROM `user` WHERE `email` = ?',[req.body.email],(err,user)=>{
+    db.execute('SELECT * FROM `user` WHERE `email` = ?',[req.body.email],(err,user)=>{
         if(err) throw err;
         console.log(user);
         if(user.length == 0){
