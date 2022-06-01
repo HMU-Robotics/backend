@@ -31,7 +31,7 @@ exports.user_signup = async(req,res,next) =>{
                 } 
                 try{
                 
-                    db.execute('INSERT INTO `user`(email,password,first_name,last_name,discord_id,role_id) VALUES(?,?,?,?,?,?)',[req.body.email,hash,req.body.first_name,req.body.last_name,req.body.discord_id,req.role_id],(err,result)=>{
+                    db.execute('INSERT INTO `user`(email,password,first_name,last_name,discord_id,role_id) VALUES(?,?,?,?,?,?)',[req.body.email,hash,req.body.first_name,req.body.last_name,req.body.discord_id,req.body.role_id],(err,result)=>{
                         if(err) throw err;
                         console.log(result)
                         res.status(200).json({
